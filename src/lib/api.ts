@@ -1,7 +1,5 @@
 import { getApiBase } from "./runtime-config";
 
-const API_BASE = getApiBase();
-
 export class ApiError extends Error {
   status: number;
   details?: unknown;
@@ -49,7 +47,7 @@ async function refreshAccessToken() {
   const refreshToken = getRefreshToken();
   if (!refreshToken) return null;
 
-  const res = await fetch(`${API_BASE}/auth/refresh`, {
+  const res = await fetch(`${getApiBase()}/auth/refresh`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refreshToken }),
@@ -74,7 +72,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}, retry = 
   const token = getAccessToken();
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers }).catch(() => {
+  const res = await fetch(`${getApiBase()}${path}`, { ...init, headers }).catch(() => {
     throw new ApiError(0, "Cannot reach Biazo API. Ensure the server is running on port 4000.");
   });
 

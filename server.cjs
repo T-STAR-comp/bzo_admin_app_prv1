@@ -24,13 +24,7 @@ if (indexTemplate.includes("/src/main.tsx")) {
   process.exit(1);
 }
 
-const runtimeApiUrl = process.env.API_URL || process.env.VITE_API_URL || "";
-const indexHtml = runtimeApiUrl
-  ? indexTemplate.replace(
-      "</head>",
-      `<script>window.__BIAZO_API_URL=${JSON.stringify(runtimeApiUrl)}</script></head>`,
-    )
-  : indexTemplate;
+const indexHtml = indexTemplate;
 
 function sendIndex(_req, res) {
   res.type("html").send(indexHtml);
@@ -67,7 +61,4 @@ app.use((req, res, next) => {
 app.listen(port, () => {
   console.log(`Biazo admin app listening on port ${port}`);
   console.log(`Serving static files from ${distDir}`);
-  if (runtimeApiUrl) {
-    console.log(`Runtime API URL: ${runtimeApiUrl}`);
-  }
 });
