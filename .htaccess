@@ -1,0 +1,16 @@
+# Static hosting: document root is the biazo-admin folder (not dist/).
+# Sends all traffic to the Vite build in dist/
+Options -Indexes
+
+AddType application/javascript .js .mjs
+AddType text/css .css
+
+RewriteEngine On
+RewriteBase /
+
+RewriteRule ^api/ - [END]
+
+RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
+RewriteRule ^(.+)$ dist/$1 [L]
+
+RewriteRule ^ dist/index.html [L]

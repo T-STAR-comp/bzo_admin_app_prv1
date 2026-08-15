@@ -9,4 +9,12 @@ export default defineConfig({
     alias: { "@": path.resolve(__dirname, "src") },
   },
   server: { port: 3001 },
+  build: {
+    outDir: "dist",
+    rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, "index.vite.html"),
+      },
+    },
+  },
 });
