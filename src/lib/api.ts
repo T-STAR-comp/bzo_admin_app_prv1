@@ -1,4 +1,6 @@
-const API_BASE = import.meta.env.VITE_API_URL ?? "/api";
+import { getApiBase } from "./runtime-config";
+
+const API_BASE = getApiBase();
 
 export class ApiError extends Error {
   status: number;

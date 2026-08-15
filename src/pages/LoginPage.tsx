@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Logo } from "@/components/Logo";
 import { useAuth } from "@/context/auth-context";
 
 export function LoginPage() {
@@ -48,8 +47,7 @@ export function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="glass-panel w-full max-w-md rounded-3xl p-8">
-        <Logo />
-        <h1 className="mt-8 text-2xl font-semibold tracking-[-0.03em]">Admin sign in</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.03em]">Admin sign in</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Use your admin credentials. A verification code will be sent to the admin email.
         </p>
