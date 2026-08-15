@@ -1,16 +1,24 @@
-# Static hosting: document root is the biazo-admin folder (not dist/).
-# Sends all traffic to the Vite build in dist/
+# Static hosting: document root = this folder (biazo-admin), NOT dist/ alone.
+# Run `npm run build` locally, then upload: .htaccess, index.html, dist/
 Options -Indexes
 
-AddType application/javascript .js .mjs
-AddType text/css .css
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+</IfModule>
 
 RewriteEngine On
 RewriteBase /
 
+# Never proxy API to this SPA
 RewriteRule ^api/ - [END]
 
+# Block dev source if the full repo was uploaded by mistake
+RewriteRule ^src/ - [F,L]
+
+# Serve built assets from dist/ (/assets/*, /config.js, etc.)
 RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
 RewriteRule ^(.+)$ dist/$1 [L]
 
+# SPA fallback — always use production index from dist/
 RewriteRule ^ dist/index.html [L]

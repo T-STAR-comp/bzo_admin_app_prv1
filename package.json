@@ -4,7 +4,7 @@
   "main": "server.cjs",
   "scripts": {
     "dev": "vite index.vite.html --port 3001",
-    "build": "tsc --noEmit && vite build && node -e \"const fs=require('fs');const s='dist/index.vite.html';if(fs.existsSync(s))fs.copyFileSync(s,'dist/index.html');if(fs.existsSync('spa.htaccess'))fs.copyFileSync('spa.htaccess','dist/.htaccess')\"",
+    "build": "tsc --noEmit && vite build && node scripts/post-build.cjs",
     "start": "node server.cjs",
     "preview": "node server.cjs"
   },
