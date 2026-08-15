@@ -52,8 +52,13 @@ app.use(
 );
 
 app.get("/", sendIndex);
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/assets/") || req.path.includes(".")) {
+
+// Express 5: bare "*" is invalid in path-to-regexp; use final middleware for SPA routes.
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    return next();
+  }
+  if (req.path.startsWith("/assets/") || /\.[^/]+$/.test(req.path)) {
     return next();
   }
   sendIndex(req, res);
