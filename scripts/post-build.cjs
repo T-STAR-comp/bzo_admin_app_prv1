@@ -11,7 +11,4 @@ if (fs.existsSync("spa.htaccess")) {
   fs.copyFileSync("spa.htaccess", "dist/.htaccess");
 }
 
-// Apache DirectoryIndex serves root index.html — must be the production build, not dev.
-if (fs.existsSync("dist/index.html")) {
-  fs.copyFileSync("dist/index.html", "index.html");
-}
+// Do NOT copy dist/index.html to the project root — that breaks Vite dev (MIME errors).

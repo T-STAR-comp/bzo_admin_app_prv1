@@ -3,7 +3,8 @@
   "private": true,
   "main": "server.cjs",
   "scripts": {
-    "dev": "vite index.vite.html --port 3001",
+    "predev": "node scripts/predev.cjs",
+    "dev": "vite --port 3001",
     "build": "tsc --noEmit && vite build && node scripts/post-build.cjs",
     "start": "node server.cjs",
     "preview": "node server.cjs"
