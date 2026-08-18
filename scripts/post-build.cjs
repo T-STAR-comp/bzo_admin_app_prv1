@@ -19,7 +19,7 @@ if (fs.existsSync("spa.htaccess")) {
 
 const html = fs.readFileSync(distIndex, "utf8");
 if (html.includes("/src/main.tsx")) {
-  console.error("dist/index.html still references /src/main.tsx — production build is stale.");
+  console.error("dist/index.html still references /src/main.tsx - production build is stale.");
   process.exit(1);
 }
 
@@ -34,4 +34,4 @@ for (const asset of assetRefs) {
   }
 }
 
-console.log("Admin production dist verified — upload .htaccess and dist/ to cPanel.");
+console.log("Admin production dist verified - upload .htaccess and dist/ to cPanel.");
