@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { LoadingOverlay } from "@/components/LoadingScreen";
 import { useModal } from "@/context/modal-context";
 import { apiFetch } from "@/lib/api";
+import { getApiBase } from "@/lib/runtime-config";
 import { formatMwk } from "@/lib/utils";
 import { PageShell } from "@/pages/StatisticsPage";
 
@@ -54,7 +55,7 @@ export function PaymentsPage() {
       title: String(p.chargeId ?? "Payment"),
       subtitle: `${p.userName ?? "Customer"} · ${String(p.status)}`,
       width: "lg",
-      content: <PaymentDetailModal detail={detail} />,
+      content: <PaymentDetailModal detail={detail} paymentId={id} onUpdated={load} />,
     });
   };
 
@@ -113,11 +114,72 @@ export function PaymentsPage() {
   );
 }
 
-function PaymentDetailModal({ detail }: { detail: PaymentDetail }) {
+function PaymentDetailModal({
+  detail,
+  paymentId,
+  onUpdated,
+}: {
+  detail: PaymentDetail;
+  paymentId: string;
+  onUpdated: () => void;
+}) {
   const p = detail.payment;
   const snapshot = p.orderSnapshot as Record<string, unknown> | undefined;
   const bank = p.bankDetails as Record<string, string | null> | null;
   const card = p.card3ds as { requires3ds: boolean; authUrl: string | null } | null;
+  const [acting, setActing] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+
+  const hasProof = Boolean(p.hasProof);
+  const proofUrl = hasProof ? `${getApiBase()}/admin/payments/ledger/${paymentId}/proof` : null;
+
+  const viewProof = async () => {
+    const token = localStorage.getItem("biazo-admin-access");
+    if (!token || !proofUrl) return;
+    const res = await fetch(proofUrl, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) {
+      setMessage("Could not load proof document.");
+      return;
+    }
+    const blob = await res.blob();
+    window.open(URL.createObjectURL(blob), "_blank", "noopener,noreferrer");
+  };
+
+  const approve = async () => {
+    setActing(true);
+    setMessage(null);
+    try {
+      await apiFetch(`/admin/payments/ledger/${paymentId}/approve-proof`, { method: "POST" });
+      setMessage("Payment approved. Application marked as paid.");
+      onUpdated();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Approval failed");
+    } finally {
+      setActing(false);
+    }
+  };
+
+  const reject = async () => {
+    if (rejectReason.trim().length < 3) {
+      setMessage("Enter a short rejection reason.");
+      return;
+    }
+    setActing(true);
+    setMessage(null);
+    try {
+      await apiFetch(`/admin/payments/ledger/${paymentId}/reject-proof`, {
+        method: "POST",
+        body: JSON.stringify({ reason: rejectReason.trim() }),
+      });
+      setMessage("Proof rejected. Customer can upload again.");
+      onUpdated();
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Rejection failed");
+    } finally {
+      setActing(false);
+    }
+  };
 
   const fields: Array<[string, string]> = [
     ["Charge ID", String(p.chargeId ?? "—")],
@@ -130,6 +192,8 @@ function PaymentDetailModal({ detail }: { detail: PaymentDetail }) {
     ["Phone", String(p.userPhone ?? "—")],
     ["Order type", String(p.orderType ?? "—")],
     ["Order ID", String(p.orderId ?? "—")],
+    ["Manual reference", String(p.manualReference ?? "—")],
+    ["Proof status", String(p.proofReviewStatus ?? "—")],
     ["PayChangu status", String(p.paychanguStatus ?? "—")],
     ["PayChangu ref", String(p.paychanguRefId ?? "—")],
     ["Mobile number", String(p.mobileNumber ?? "—")],
@@ -158,6 +222,49 @@ function PaymentDetailModal({ detail }: { detail: PaymentDetail }) {
           <h3 className="font-semibold">Bank transfer details</h3>
           <p className="mt-2">{bank.bankName} · {bank.accountNumber} · {bank.accountName}</p>
           {bank.expiresAt && <p className="text-xs text-muted-foreground">Expires {format(new Date(bank.expiresAt), "PPpp")}</p>}
+        </section>
+      )}
+
+      {p.paymentMethod === "manual_transfer" && p.proofReviewStatus === "submitted" && proofUrl && (
+        <section className="rounded-xl border border-signal/40 bg-signal-soft/20 p-4">
+          <h3 className="font-semibold">Manual payment proof</h3>
+          <p className="mt-1 text-xs text-muted-foreground">Review the receipt, then approve or reject.</p>
+          <button
+            type="button"
+            onClick={() => void viewProof()}
+            className="mt-3 text-sm font-medium text-signal underline"
+          >
+            View proof document
+          </button>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button type="button" onClick={approve} disabled={acting} className="btn-signal rounded-lg px-4 py-2 text-sm font-medium">
+              {acting ? "Working…" : "Approve & mark paid"}
+            </button>
+          </div>
+          <div className="mt-4 space-y-2">
+            <input
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              placeholder="Rejection reason (shown to customer)"
+              className="w-full rounded-lg border border-hairline px-3 py-2 text-sm"
+            />
+            <button
+              type="button"
+              onClick={reject}
+              disabled={acting}
+              className="rounded-lg border border-hairline px-4 py-2 text-sm text-red-700"
+            >
+              Reject proof
+            </button>
+          </div>
+          {message && <p className="mt-3 text-sm">{message}</p>}
+        </section>
+      )}
+
+      {Boolean(p.proofRejectionReason) && (
+        <section className="rounded-xl border border-hairline p-4">
+          <h3 className="font-semibold">Proof rejection</h3>
+          <p className="mt-1 text-sm">{String(p.proofRejectionReason)}</p>
         </section>
       )}
 

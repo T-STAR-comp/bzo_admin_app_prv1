@@ -6,6 +6,7 @@ import { LoginPage } from "@/pages/LoginPage";
 import { ApplicationsPage } from "@/pages/ApplicationsPage";
 import { AuditPage } from "@/pages/AuditPage";
 import { FinancePage, PaymentsPage, SettingsPage, TicketsPage } from "@/pages/OtherPages";
+import { PaymentSourcesPage } from "@/pages/PaymentSourcesPage";
 import { TravelCreditsPage } from "@/pages/TravelCreditsPage";
 import { RoutesPage } from "@/pages/RoutesPage";
 import { StatisticsPage } from "@/pages/StatisticsPage";
@@ -46,6 +47,7 @@ export function App() {
               <Route path="users" element={<UsersPage />} />
               <Route path="user-control" element={<UserControlPage />} />
               <Route path="payments" element={<PaymentsPage />} />
+              <Route path="payment-sources" element={<PaymentSourcesPage />} />
               <Route path="finance" element={<FinancePage />} />
               <Route path="travel-credits" element={<TravelCreditsPage />} />
               <Route path="audit" element={<AuditPage />} />

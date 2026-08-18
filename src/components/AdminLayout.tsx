@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BarChart3, ClipboardList, CreditCard, FileText, Gift, LayoutDashboard, LogOut, Plane, Settings, Ticket, UserCog, Users, Wallet } from "lucide-react";
+import { BarChart3, Building2, ClipboardList, CreditCard, FileText, Gift, LayoutDashboard, LogOut, Plane, Settings, Ticket, UserCog, Users, Wallet } from "lucide-react";
 import { ModalStack } from "@/components/ModalStack";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
@@ -10,6 +10,7 @@ const navItems = [
   { to: "/users", label: "Users", icon: Users },
   { to: "/user-control", label: "User control", icon: UserCog },
   { to: "/payments", label: "Payments", icon: CreditCard },
+  { to: "/payment-sources", label: "Payment sources", icon: Building2 },
   { to: "/finance", label: "Finance tracker", icon: Wallet },
   { to: "/audit", label: "Audit log", icon: FileText },
   { to: "/travel-credits", label: "Travel credits", icon: Gift },
