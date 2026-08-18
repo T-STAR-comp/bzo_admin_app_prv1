@@ -149,6 +149,7 @@ function PaymentSourceForm({
   initial?: PaymentSource;
   onSaved: () => Promise<void>;
 }) {
+  const { popModal } = useModal();
   const [form, setForm] = useState({
     ...emptyForm,
     ...(initial
@@ -198,6 +199,7 @@ function PaymentSourceForm({
         });
       }
       await onSaved();
+      popModal();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save");
     } finally {

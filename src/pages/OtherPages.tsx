@@ -123,6 +123,7 @@ function PaymentDetailModal({
   paymentId: string;
   onUpdated: () => void;
 }) {
+  const { popModal } = useModal();
   const p = detail.payment;
   const snapshot = p.orderSnapshot as Record<string, unknown> | undefined;
   const bank = p.bankDetails as Record<string, string | null> | null;
@@ -151,8 +152,8 @@ function PaymentDetailModal({
     setMessage(null);
     try {
       await apiFetch(`/admin/payments/ledger/${paymentId}/approve-proof`, { method: "POST" });
-      setMessage("Payment approved. Application marked as paid.");
       onUpdated();
+      popModal();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Approval failed");
     } finally {
@@ -172,8 +173,8 @@ function PaymentDetailModal({
         method: "POST",
         body: JSON.stringify({ reason: rejectReason.trim() }),
       });
-      setMessage("Proof rejected. Customer can upload again.");
       onUpdated();
+      popModal();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Rejection failed");
     } finally {
@@ -568,6 +569,7 @@ type TicketDetail = {
 };
 
 function TicketDetailModal({ detail, onUpdated }: { detail: TicketDetail; onUpdated: () => void }) {
+  const { popModal } = useModal();
   const [seat, setSeat] = useState(detail.ticket.seat ?? "");
   const [gate, setGate] = useState(detail.ticket.gate ?? "");
   const [status, setStatus] = useState(detail.ticket.status);
@@ -584,8 +586,8 @@ function TicketDetailModal({ detail, onUpdated }: { detail: TicketDetail; onUpda
         method: "PATCH",
         body: JSON.stringify({ seat, gate, status, passengerNames }),
       });
-      setMessage("Ticket updated.");
       onUpdated();
+      popModal();
     } finally {
       setSaving(false);
     }

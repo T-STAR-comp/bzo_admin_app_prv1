@@ -279,9 +279,7 @@ function ApplicationDetailModal({
         method: edit ? "PATCH" : "POST",
         body: JSON.stringify(payload),
       });
-      if (!edit) {
-        popModal();
-      }
+      popModal();
       await refreshDetail();
     } finally {
       setSubmitting(false);
