@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+/cpanel-upload
 /index.html
 dist-ssr
 .output

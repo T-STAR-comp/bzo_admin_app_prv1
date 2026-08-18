@@ -1,8 +1,20 @@
-# Copy to dist/.htaccess when document root points directly at dist/
+# Upload ONLY the contents of cpanel-upload/ to public_html (after npm run pack:cpanel).
+# Do NOT upload the repo root index.html or src/ folder.
+
+Options -Indexes
+
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+</IfModule>
+
 RewriteEngine On
 RewriteBase /
 
 RewriteRule ^api/ - [END]
+
+# Never rewrite real static files (prevents HTML MIME errors on .js requests)
+RewriteRule ^assets/ - [L]
 
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f

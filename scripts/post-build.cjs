@@ -34,4 +34,5 @@ for (const asset of assetRefs) {
   }
 }
 
-console.log("Admin production dist verified - upload .htaccess and dist/ to cPanel.");
+console.log("Admin production dist verified.");
+console.log("For cPanel: npm run pack:cpanel  then upload cpanel-upload/ contents to public_html.");

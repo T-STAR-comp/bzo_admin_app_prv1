@@ -1,27 +1,27 @@
-# Static hosting: document root is the biazo-admin folder (not dist/ alone).
-# After `npm run build`, upload this file and the entire dist/ folder.
+# Optional layout: document root = project folder containing dist/
+# Prefer uploading cpanel-upload/ contents directly to public_html instead.
 Options -Indexes
 
 DirectoryIndex dist/index.html
 
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+</IfModule>
+
 RewriteEngine On
 RewriteBase /
 
-# Optional: proxy /api to the Node backend on the same server.
-# RewriteRule ^api/(.*)$ http://127.0.0.1:YOUR_NODE_PORT/api/$1 [P,L]
-
-# Never send API requests to the SPA (avoids HTML responses for POST /api/...)
 RewriteRule ^api/ - [END]
 
-# Always use the production shell from dist/ (ignore stray root index.html)
-RewriteRule ^index\.html$ dist/index.html [L]
-
-# Block dev sources if the full repo was uploaded by mistake
+# Block dev entry points if the full repo was uploaded by mistake
 RewriteRule ^src/ - [F,L]
+RewriteRule ^index\.vite\.html$ - [F,L]
 
-# Serve built assets and files from dist/ when they exist
+# Serve built assets from dist/ (must run before SPA fallback)
+RewriteRule ^assets/(.*)$ dist/assets/$1 [L]
+
 RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
 RewriteRule ^(.+)$ dist/$1 [L]
 
-# SPA fallback (/, /payments, /payment-sources, etc.)
 RewriteRule ^ dist/index.html [L]

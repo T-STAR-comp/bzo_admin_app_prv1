@@ -3,9 +3,9 @@
   "private": true,
   "main": "server.cjs",
   "scripts": {
-    "predev": "node scripts/predev.cjs",
-    "dev": "vite --port 3001",
+    "dev": "vite --port 3001 index.vite.html",
     "build": "tsc --noEmit && vite build && node scripts/post-build.cjs",
+    "pack:cpanel": "npm run build && node scripts/pack-cpanel.cjs admin",
     "start": "node server.cjs",
     "preview": "node server.cjs"
   },
