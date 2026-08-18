@@ -292,7 +292,7 @@ function ApplicationDetailModal({
     if (ticketsRemaining <= 0) return;
     pushModal({
       title: `Upload ticket ${ticketsUploaded + 1} of ${ticketsRequired}`,
-      subtitle: `${app.referenceNumber} — enter details for this boarding pass only`,
+      subtitle: `${app.referenceNumber} - enter details for this boarding pass only`,
       width: "lg",
       content: (
         <UploadTicketForm
@@ -384,7 +384,7 @@ function ApplicationDetailModal({
             <h3 className="font-semibold">Flight availability</h3>
             <p className="mt-1 text-xs text-muted-foreground">
               {quote.isAlternateOffer
-                ? "Customer requested different specs — enter what you found."
+                ? "Customer requested different specs - enter what you found."
                 : "Confirm the flight details that match the customer request."}
             </p>
             <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm">
@@ -402,7 +402,7 @@ function ApplicationDetailModal({
           <div className="rounded-xl border-2 border-signal/30 bg-signal-soft/40 p-4">
             <h3 className="font-semibold text-ink">Pricing</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Fare and optional add-ons are shown separately to the customer — they can remove hotel or car rental before paying.
+              Fare and optional add-ons are shown separately to the customer - they can remove hotel or car rental before paying.
             </p>
             <div className="mt-3">
               <Field label="Main fare (MWK)" type="number" value={quote.quotedPriceMwk} onChange={(v) => setQuote({ ...quote, quotedPriceMwk: v })} placeholder="450000" required />
@@ -450,7 +450,7 @@ function ApplicationDetailModal({
             <div className="mt-3 rounded-lg border border-dashed border-hairline bg-background p-3">
               <p className="text-sm font-medium">Exchange rates (admin only)</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                MWK per 1 unit of foreign currency — e.g. 1750 means 1 USD costs 1,750 kwacha. Used to convert quote prices for customers. Not shown to customers.
+                MWK per 1 unit of foreign currency - e.g. 1750 means 1 USD costs 1,750 kwacha. Used to convert quote prices for customers. Not shown to customers.
               </p>
               <div className="mt-2 grid gap-2 sm:grid-cols-2">
                 <Field label="MWK per USD" type="number" value={quote.rateUsd} onChange={(v) => setQuote({ ...quote, rateUsd: v })} placeholder="1750" />
@@ -526,7 +526,7 @@ function ApplicationDetailModal({
           <p className="mt-2 text-sm">
             {app.paidAmount != null && app.paidCurrency
               ? `${app.paidAmount.toLocaleString()} ${app.paidCurrency}`
-              : "—"}
+              : "-"}
             {app.customerDisplayCurrency && app.customerDisplayCurrency !== app.paidCurrency && (
               <span className="text-muted-foreground">
                 {" "}
@@ -569,7 +569,7 @@ function ApplicationDetailModal({
                   <span className="font-semibold text-ink">{ticketSlotLabel(i)}</span>
                   <span className="text-muted-foreground">
                     {" · "}
-                    {t.passengerNames ?? "—"}
+                    {t.passengerNames ?? "-"}
                     {t.seat ? ` · Seat ${t.seat}` : ""}
                     {t.flightNumber ? ` · ${t.flightNumber}` : ""}
                     {t.bookingNumber ? ` · PNR ${t.bookingNumber}` : ""}
@@ -727,7 +727,7 @@ function UploadTicketForm({
       </div>
 
       <button type="submit" disabled={!file || loading} className="btn-signal w-full rounded-lg py-2.5 text-sm font-semibold disabled:opacity-50">
-        {isLastTicket ? "Upload final ticket & notify customer" : `Save ticket ${ticketIndex + 1} — upload next`}
+        {isLastTicket ? "Upload final ticket & notify customer" : `Save ticket ${ticketIndex + 1} - upload next`}
       </button>
     </form>
   );

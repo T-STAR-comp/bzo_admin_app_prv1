@@ -284,7 +284,7 @@ export function TravelCreditsPage() {
                       <td className="px-4 py-3 capitalize">{row.status}</td>
                       <td className="px-4 py-3 text-right font-semibold">{formatMwk(row.balanceMwk)}</td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {row.updatedAt ? format(new Date(row.updatedAt), "dd MMM yyyy HH:mm") : "—"}
+                        {row.updatedAt ? format(new Date(row.updatedAt), "dd MMM yyyy HH:mm") : "-"}
                       </td>
                     </tr>
                   ))
@@ -319,7 +319,7 @@ export function TravelCreditsPage() {
                 data.transactions.map((tx) => (
                   <tr key={tx.id} className="border-b border-hairline last:border-0">
                     <td className="px-4 py-3">
-                      <p className="font-medium">{tx.userName ?? "—"}</p>
+                      <p className="font-medium">{tx.userName ?? "-"}</p>
                       <p className="text-xs text-muted-foreground">{tx.userEmail}</p>
                     </td>
                     <td className="px-4 py-3 capitalize">{tx.entryType}</td>

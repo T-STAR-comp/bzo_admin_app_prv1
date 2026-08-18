@@ -1,9 +1,4 @@
 # Copy to dist/.htaccess when document root points directly at dist/
-Options -Indexes
-
-AddType application/javascript .js .mjs
-AddType text/css .css
-
 RewriteEngine On
 RewriteBase /
 

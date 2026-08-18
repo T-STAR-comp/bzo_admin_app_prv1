@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    /** Ignored in production — dev-only override, must match allowlist. */
+    /** Ignored in production - dev-only override, must match allowlist. */
     __BIAZO_API_URL?: string;
   }
 }

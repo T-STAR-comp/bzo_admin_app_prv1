@@ -240,7 +240,7 @@ function DepartureBookingsModal({
           <Row label="PNR" value={detail.booking.pnr} />
           <Row label="Status" value={detail.booking.status} />
           <Row label="Account" value={detail.booking.userStatus} />
-          <Row label="Phone" value={detail.booking.userPhone ?? "—"} />
+          <Row label="Phone" value={detail.booking.userPhone ?? "-"} />
           <Row label="Route" value={`${detail.booking.originCode}→${detail.booking.destinationCode}`} />
           <Row label="Depart" value={format(new Date(detail.booking.departAt), "PPpp")} />
           <Row label="Paid" value={formatMwk(detail.booking.priceMwk)} />

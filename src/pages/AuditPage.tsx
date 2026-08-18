@@ -109,14 +109,14 @@ export function AuditPage() {
                           <p className="text-xs text-muted-foreground">{e.userEmail}</p>
                         </>
                       ) : (
-                        "—"
+                        "-"
                       )}
                     </td>
                     <td className="px-4 py-3 max-w-md">
                       {e.metadata ? (
                         <pre className="overflow-x-auto rounded bg-surface p-2 text-xs">{JSON.stringify(e.metadata, null, 2)}</pre>
                       ) : (
-                        <span className="text-muted-foreground">{e.ipAddress ?? "—"}</span>
+                        <span className="text-muted-foreground">{e.ipAddress ?? "-"}</span>
                       )}
                     </td>
                   </tr>

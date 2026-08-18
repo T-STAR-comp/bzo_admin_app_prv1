@@ -182,28 +182,28 @@ function PaymentDetailModal({
   };
 
   const fields: Array<[string, string]> = [
-    ["Charge ID", String(p.chargeId ?? "—")],
-    ["Status", String(p.status ?? "—")],
-    ["Payment method", String(p.paymentMethod ?? "—")],
+    ["Charge ID", String(p.chargeId ?? "-")],
+    ["Status", String(p.status ?? "-")],
+    ["Payment method", String(p.paymentMethod ?? "-")],
     ["Amount", formatMwk(Number(p.amountMwk ?? 0))],
-    ["Currency", String(p.currency ?? "—")],
-    ["Display currency", String(p.displayCurrency ?? "—")],
-    ["Customer", `${p.userName ?? "—"} · ${p.userEmail ?? "—"}`],
-    ["Phone", String(p.userPhone ?? "—")],
-    ["Order type", String(p.orderType ?? "—")],
-    ["Order ID", String(p.orderId ?? "—")],
-    ["Manual reference", String(p.manualReference ?? "—")],
-    ["Proof status", String(p.proofReviewStatus ?? "—")],
-    ["PayChangu status", String(p.paychanguStatus ?? "—")],
-    ["PayChangu ref", String(p.paychanguRefId ?? "—")],
-    ["Mobile number", String(p.mobileNumber ?? "—")],
-    ["Mobile operator", String(p.mobileOperatorName ?? "—")],
-    ["Created", p.createdAt ? format(new Date(String(p.createdAt)), "PPpp") : "—"],
-    ["Completed", p.completedAt ? format(new Date(String(p.completedAt)), "PPpp") : "—"],
-    ["Expires", p.expiresAt ? format(new Date(String(p.expiresAt)), "PPpp") : "—"],
+    ["Currency", String(p.currency ?? "-")],
+    ["Display currency", String(p.displayCurrency ?? "-")],
+    ["Customer", `${p.userName ?? "-"} · ${p.userEmail ?? "-"}`],
+    ["Phone", String(p.userPhone ?? "-")],
+    ["Order type", String(p.orderType ?? "-")],
+    ["Order ID", String(p.orderId ?? "-")],
+    ["Manual reference", String(p.manualReference ?? "-")],
+    ["Proof status", String(p.proofReviewStatus ?? "-")],
+    ["PayChangu status", String(p.paychanguStatus ?? "-")],
+    ["PayChangu ref", String(p.paychanguRefId ?? "-")],
+    ["Mobile number", String(p.mobileNumber ?? "-")],
+    ["Mobile operator", String(p.mobileOperatorName ?? "-")],
+    ["Created", p.createdAt ? format(new Date(String(p.createdAt)), "PPpp") : "-"],
+    ["Completed", p.completedAt ? format(new Date(String(p.completedAt)), "PPpp") : "-"],
+    ["Expires", p.expiresAt ? format(new Date(String(p.expiresAt)), "PPpp") : "-"],
     ["Order fulfilled", p.orderFulfilled ? "Yes" : "No"],
     ["Verification attempts", String(p.verificationAttempts ?? 0)],
-    ["Failure reason", String(p.failureReason ?? "—")],
+    ["Failure reason", String(p.failureReason ?? "-")],
   ];
 
   return (
@@ -362,7 +362,7 @@ export function FinancePage() {
           to: new Date(reportTo).toISOString(),
         }),
       });
-      setReportMessage(`${result.message} — sent to ${result.sentTo}`);
+      setReportMessage(`${result.message} - sent to ${result.sentTo}`);
     } catch (err) {
       setReportMessage(err instanceof Error ? err.message : "Failed to send report");
     } finally {
@@ -459,7 +459,7 @@ export function FinancePage() {
               data.entries.map((e) => (
                 <tr key={e.id} className="border-b border-hairline last:border-0">
                   <td className="px-4 py-3">{e.description}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{e.userName ?? "—"}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{e.userName ?? "-"}</td>
                   <td className="px-4 py-3 capitalize">{e.entryType}</td>
                   <td className="px-4 py-3 text-right font-medium">{formatMwk(e.amountMwk)}</td>
                   <td className="px-4 py-3 text-muted-foreground">{format(new Date(e.createdAt), "dd MMM yyyy")}</td>
@@ -527,7 +527,7 @@ export function TicketsPage() {
                   </td>
                   <td className="px-4 py-3">{t.originCode} → {t.destinationCode}</td>
                   <td className="px-4 py-3">{format(new Date(t.departAt), "dd MMM yyyy HH:mm")}</td>
-                  <td className="px-4 py-3">{t.seat ?? "—"}</td>
+                  <td className="px-4 py-3">{t.seat ?? "-"}</td>
                   <td className="px-4 py-3 capitalize">{t.displayStatus ?? t.status}</td>
                   <td className="px-4 py-3"><ChevronRight className="h-4 w-4 text-muted-foreground" /></td>
                 </tr>

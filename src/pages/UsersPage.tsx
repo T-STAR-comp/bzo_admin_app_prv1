@@ -117,7 +117,7 @@ export function UsersPage() {
                       <span className="inline-flex items-center gap-1 text-destructive">
                         <AlertTriangle className="h-3.5 w-3.5" />{u.openIssues}
                       </span>
-                    ) : "—"}
+                    ) : "-"}
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {u.lastLoginAt ? format(new Date(u.lastLoginAt), "dd MMM yyyy") : "Never"}
@@ -239,7 +239,7 @@ function UserDetailModal({ detail, onUpdated }: { detail: UserDetail; onUpdated:
           {detail.tickets!.map((t) => (
             <div key={t.id} className="flex justify-between border-b border-hairline py-2 text-sm last:border-0">
               <span>
-                {t.originCode} → {t.destinationCode} · {t.passengerNames ?? "—"}
+                {t.originCode} → {t.destinationCode} · {t.passengerNames ?? "-"}
                 {t.seat && ` · seat ${t.seat}`}
               </span>
               <span className="capitalize text-muted-foreground">{t.displayStatus ?? t.status}</span>
