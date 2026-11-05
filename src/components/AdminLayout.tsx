@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BarChart3, Building2, ClipboardList, CreditCard, FileText, Gift, LayoutDashboard, LogOut, Plane, Settings, Ticket, UserCog, Users, Wallet } from "lucide-react";
+import { BarChart3, Building2, ClipboardList, CreditCard, FileText, Gift, HandCoins, LayoutDashboard, LogOut, Plane, Settings, Ticket, UserCog, Users, Wallet } from "lucide-react";
 import { ModalStack } from "@/components/ModalStack";
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { to: "/", label: "Statistics", icon: BarChart3, end: true },
   { to: "/applications", label: "Applications", icon: ClipboardList },
+  { to: "/agents", label: "Agents", icon: HandCoins },
   { to: "/users", label: "Users", icon: Users },
   { to: "/user-control", label: "User control", icon: UserCog },
   { to: "/payments", label: "Payments", icon: CreditCard },

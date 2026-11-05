@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AdminLayout } from "@/components/AdminLayout";
+import { AgentsPage } from "@/pages/AgentsPage";
 import { AuthProvider, useAuth } from "@/context/auth-context";
 import { ModalProvider } from "@/context/modal-context";
 import { LoginPage } from "@/pages/LoginPage";
@@ -44,6 +45,7 @@ export function App() {
             >
               <Route index element={<StatisticsPage />} />
               <Route path="applications" element={<ApplicationsPage />} />
+              <Route path="agents" element={<AgentsPage />} />
               <Route path="users" element={<UsersPage />} />
               <Route path="user-control" element={<UserControlPage />} />
               <Route path="payments" element={<PaymentsPage />} />

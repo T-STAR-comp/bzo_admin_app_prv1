@@ -73,7 +73,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}, retry = 
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const res = await fetch(`${getApiBase()}${path}`, { ...init, headers }).catch(() => {
-    throw new ApiError(0, "Cannot reach Biazo API. Ensure the server is running on port 4000.");
+    throw new ApiError(0, "Cannot reach Biazo API.");
   });
 
   if (res.status === 401 && retry && getRefreshToken()) {
