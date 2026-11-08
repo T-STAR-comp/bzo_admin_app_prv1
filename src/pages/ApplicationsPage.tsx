@@ -23,6 +23,7 @@ type AppRow = {
   customerEmail: string;
   passengerCount: number;
   quotedPriceMwk: number | null;
+  profitAmountMwk: number | null;
   extraChargesMwk: number;
   totalPriceMwk: number;
   requiredTicketCount: number;
@@ -230,8 +231,19 @@ function ApplicationDetailModal({
   };
 
   const [quote, setQuote] = useState(() => quoteFormFromApp(initial.app));
+  const quoteTotalMwk =
+    (Number(quote.quotedPriceMwk) || 0) +
+    (quote.includeHotel && quote.hotelName && Number(quote.hotelAmountMwk) > 0 ? Number(quote.hotelAmountMwk) : 0) +
+    (quote.includeCarRental && quote.carProvider && Number(quote.carAmountMwk) > 0 ? Number(quote.carAmountMwk) : 0) +
+    (quote.extraLabel && Number(quote.extraAmountMwk) > 0 ? Number(quote.extraAmountMwk) : 0);
+  const invalidProfitAmount =
+    quote.profitAmountMwk === "" ||
+    !Number.isFinite(Number(quote.profitAmountMwk)) ||
+    Number(quote.profitAmountMwk) < 0 ||
+    Number(quote.profitAmountMwk) > quoteTotalMwk;
 
   const submitQuote = async (edit = false) => {
+    if (invalidProfitAmount) return;
     setSubmitting(true);
     try {
       const extras: Array<{ label: string; description: string; amountMwk: number }> = [];
@@ -252,6 +264,7 @@ function ApplicationDetailModal({
         quotedAirline: quote.quotedAirline || undefined,
         quotedFlightNumber: quote.quotedFlightNumber || undefined,
         quotedPriceMwk: Number(quote.quotedPriceMwk),
+        profitAmountMwk: Number(quote.profitAmountMwk),
         hotel:
           quote.includeHotel && quote.hotelName && Number(quote.hotelAmountMwk) > 0
             ? {
@@ -402,9 +415,11 @@ function ApplicationDetailModal({
             <p className="mt-1 text-xs text-muted-foreground">
               Fare and optional add-ons are shown separately to the customer - they can remove hotel or car rental before paying.
             </p>
-            <div className="mt-3">
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
               <Field label="Main fare (MWK)" type="number" value={quote.quotedPriceMwk} onChange={(v) => setQuote({ ...quote, quotedPriceMwk: v })} placeholder="450000" required />
+              <Field label="Profit amount (MWK)" type="number" value={quote.profitAmountMwk} onChange={(v) => setQuote({ ...quote, profitAmountMwk: v })} placeholder="50000" required />
             </div>
+            <p className="mt-1 text-xs text-muted-foreground">Used to calculate agent commission; not added to the customer&apos;s price. Cannot exceed the quote total.</p>
 
             <div className="mt-4 rounded-lg border border-hairline bg-background p-3">
               <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
@@ -462,7 +477,7 @@ function ApplicationDetailModal({
           <div className="rounded-xl border border-hairline p-4">
             <h3 className="font-semibold">Message to customer</h3>
             <textarea placeholder="Optional note included in the quote email" value={quote.adminMessage} onChange={(e) => setQuote({ ...quote, adminMessage: e.target.value })} className="mt-2 w-full rounded-lg border border-hairline px-3 py-2" rows={2} />
-            <button type="button" onClick={() => submitQuote(false)} disabled={submitting || !quote.quotedPriceMwk} className="btn-signal mt-3 rounded-lg px-4 py-2 font-medium disabled:opacity-50">
+            <button type="button" onClick={() => submitQuote(false)} disabled={submitting || !quote.quotedPriceMwk || invalidProfitAmount} className="btn-signal mt-3 rounded-lg px-4 py-2 font-medium disabled:opacity-50">
               Submit quote
             </button>
           </div>
@@ -483,7 +498,9 @@ function ApplicationDetailModal({
               <Field label="Airline" value={quote.quotedAirline} onChange={(v) => setQuote({ ...quote, quotedAirline: v })} />
               <Field label="Flight number" value={quote.quotedFlightNumber} onChange={(v) => setQuote({ ...quote, quotedFlightNumber: v })} />
               <Field label="Main fare (MWK)" type="number" value={quote.quotedPriceMwk} onChange={(v) => setQuote({ ...quote, quotedPriceMwk: v })} required />
+              <Field label="Profit amount (MWK)" type="number" value={quote.profitAmountMwk} onChange={(v) => setQuote({ ...quote, profitAmountMwk: v })} required />
             </div>
+            <p className="mt-1 text-xs text-muted-foreground">Used to calculate agent commission; not added to the customer&apos;s price. Cannot exceed the quote total.</p>
             <label className="mt-3 flex cursor-pointer items-center gap-2 text-sm">
               <input type="checkbox" checked={quote.includeHotel} onChange={(e) => setQuote({ ...quote, includeHotel: e.target.checked })} />
               Include hotel
@@ -511,7 +528,7 @@ function ApplicationDetailModal({
               <Field label="MWK per GBP" type="number" value={quote.rateGbp} onChange={(v) => setQuote({ ...quote, rateGbp: v })} placeholder="2200" />
             </div>
             <textarea placeholder="Message to customer" value={quote.adminMessage} onChange={(e) => setQuote({ ...quote, adminMessage: e.target.value })} className="mt-3 w-full rounded-lg border border-hairline px-3 py-2" rows={2} />
-            <button type="button" onClick={() => submitQuote(true)} disabled={submitting || !quote.quotedPriceMwk} className="btn-signal mt-3 rounded-lg px-4 py-2 font-medium disabled:opacity-50">
+            <button type="button" onClick={() => submitQuote(true)} disabled={submitting || !quote.quotedPriceMwk || invalidProfitAmount} className="btn-signal mt-3 rounded-lg px-4 py-2 font-medium disabled:opacity-50">
               Save quote changes
             </button>
           </div>
@@ -738,6 +755,7 @@ type QuoteFormState = {
   quotedAirline: string;
   quotedFlightNumber: string;
   quotedPriceMwk: string;
+  profitAmountMwk: string;
   includeHotel: boolean;
   hotelName: string;
   hotelNights: string;
@@ -773,6 +791,7 @@ function quoteFormFromApp(app: AppRow): QuoteFormState {
     quotedAirline: app.quotedAirline ?? "",
     quotedFlightNumber: app.quotedFlightNumber ?? "",
     quotedPriceMwk: fare ? String(fare.amountMwk) : app.quotedPriceMwk ? String(app.quotedPriceMwk) : "",
+    profitAmountMwk: app.profitAmountMwk != null ? String(app.profitAmountMwk) : "",
     includeHotel: Boolean(hotel) || app.needHotel,
     hotelName: hotel?.details?.hotelName ?? "",
     hotelNights: hotel?.details?.nights ?? "",
